@@ -1,0 +1,29 @@
+version: '3'
+services: 
+
+    db: 
+      image: mcr.microsoft.com/mssql/server:2022-latest
+      volumes: 
+          - db-data:/var/opt/mssql
+      environment: 
+         ACCEPT_EULA: 'Y'
+         SA_PASSWORD: '23oct1996@'
+      ports:  
+       - "1401:1433"
+    
+    api: 
+      build: 
+          context: .
+          dockerfile: Dockerfile
+      depends_on: 
+         - db
+      ports: 
+         - "8080:80"
+      environment: 
+         - DBHost=192.168.128.1 
+         - DBPort=1401 
+         - DBPassword=23oct1996@ 
+         - DBUser=sa 
+         - DBName=OptimizelyDatabase 
+volumes:
+    db-data:
